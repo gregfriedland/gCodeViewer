@@ -132,20 +132,30 @@ GCODE.renderer = (function(){
     var  startCanvas = function() {
         canvas = document.getElementById('canvas');
 
-        var wrap = document.getElementById('wrap');
-        var gcode = document.getElementById('gcode');
-        var control = document.getElementById('control');
-        var myTab = document.getElementById('myTab');
-        var sliderVertical = document.getElementById('slider-vertical');
+        var setWidths = function() {
+            var wrap = document.getElementById('wrap');
+            var gcode = document.getElementById('gcode');
+            var control = document.getElementById('control');
+            var myTab = document.getElementById('myTab');
+            var sliderVertical = document.getElementById('slider-vertical');
+            var sliderHoriz = document.getElementById('slider-horizontal');
 
-        var gcodeWidth = (wrap.offsetWidth - control.offsetWidth - 20);
-        gcode.style.width = gcodeWidth + "px";
-        canvas.width = gcodeWidth - 30;
-        // console.log("Gcode window offsetwidth: " + gcode.offsetWidth);
-        // console.log("Gcode window width: " + gcode.style.width);
-        // console.log("Wrap window width: " + wrap.offsetWidth);
-        // console.log("Control window width: " + control.offsetWidth);
-        // console.log("Canvas width: " + canvas.width);
+            var gcodeWidth = (wrap.offsetWidth - control.offsetWidth - 20);
+            gcode.style.width = gcodeWidth + "px";
+            canvas.width = gcodeWidth - 30;
+            sliderHoriz.style.width = (canvas.width-10) + "px";
+
+            // console.log("Gcode window offsetwidth: " + gcode.offsetWidth);
+            // console.log("Gcode window width: " + gcode.style.width);
+            // console.log("Wrap window width: " + wrap.offsetWidth);
+            // console.log("Control window width: " + control.offsetWidth);
+            // console.log("Canvas width: " + canvas.width);
+        };
+
+        setWidths();
+
+        // addEvent(window, "resize", setWidths);
+        window.addEventListener('resize', function() { setWidths(); reRender(); }, false);
 
         // Проверяем понимает ли браузер canvas
         if (!canvas.getContext) {
