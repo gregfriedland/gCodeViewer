@@ -34,7 +34,7 @@ GCODE.renderer = (function(){
         colorLineLen: 9,
         colorMove: "#00ff00",
         colorRetract: "#ff0000",
-        colorRestart: "#0000ff",
+        colorRestart: "#0099ff",
         sizeRetractSpot: 1,
         modelCenter: {x: 0, y: 0},
         moveModel: true,
@@ -64,8 +64,8 @@ GCODE.renderer = (function(){
         drawGrid();
         if(renderOptions['alpha']){ctx.globalAlpha = 0.6;}
         else {ctx.globalAlpha = 1;}
-        if(renderOptions['actualWidth']){renderOptions['extrusionWidth'] = gCodeOpts['filamentDia']*gCodeOpts['wh']/zoomFactor;}
-        else {renderOptions['extrusionWidth'] = gCodeOpts['filamentDia']*gCodeOpts['wh']/zoomFactor/2;}
+        if(renderOptions['actualWidth']){renderOptions['extrusionWidth'] = gCodeOpts['nozzleDia'] * 2; } //gCodeOpts['filamentDia'] * gCodeOpts['wh']/zoomFactor;}
+        else {renderOptions['extrusionWidth'] = gCodeOpts['nozzleDia'];} //gCodeOpts['filamentDia'] * gCodeOpts['wh']/zoomFactor/2;}
         if(renderOptions['showNextLayer'] && layerNumStore < model.length - 1) {
             drawLayer(layerNumStore+1, 0, GCODE.renderer.getLayerNumSegments(layerNumStore+1), true);
         }
@@ -131,6 +131,21 @@ GCODE.renderer = (function(){
 
     var  startCanvas = function() {
         canvas = document.getElementById('canvas');
+
+        var wrap = document.getElementById('wrap');
+        var gcode = document.getElementById('gcode');
+        var control = document.getElementById('control');
+        var myTab = document.getElementById('myTab');
+        var sliderVertical = document.getElementById('slider-vertical');
+
+        var gcodeWidth = (wrap.offsetWidth - control.offsetWidth - 20);
+        gcode.style.width = gcodeWidth + "px";
+        canvas.width = gcodeWidth - 30;
+        // console.log("Gcode window offsetwidth: " + gcode.offsetWidth);
+        // console.log("Gcode window width: " + gcode.style.width);
+        // console.log("Wrap window width: " + wrap.offsetWidth);
+        // console.log("Control window width: " + control.offsetWidth);
+        // console.log("Canvas width: " + canvas.width);
 
         // Проверяем понимает ли браузер canvas
         if (!canvas.getContext) {
@@ -336,6 +351,7 @@ GCODE.renderer = (function(){
                 }
                 if(renderOptions["showMoves"]){
                     ctx.strokeStyle = renderOptions["colorMove"];
+                    ctx.lineWidth = 0.5;
                     ctx.beginPath();
                     ctx.moveTo(prevX, prevY);
                     ctx.lineTo(x*zoomFactor,y*zoomFactor);
@@ -378,7 +394,8 @@ GCODE.renderer = (function(){
                         }
                         ctx.strokeStyle = gradient;
                     }
-                    ctx.lineWidth = renderOptions['extrusionWidth'];
+                    // ctx.lineWidth = renderOptions['nozzleDia']; //renderOptions['extrusionWidth'];
+                    ctx.lineWidth = renderOptions['extrusionWidth'];                    
                     ctx.beginPath();
                     ctx.moveTo(prevX, prevY);
                     ctx.lineTo(x*zoomFactor,y*zoomFactor);
@@ -440,8 +457,8 @@ GCODE.renderer = (function(){
                     drawGrid();
                     if(renderOptions['alpha']){ctx.globalAlpha = 0.6;}
                     else {ctx.globalAlpha = 1;}
-                    if(renderOptions['actualWidth']){renderOptions['extrusionWidth'] = gCodeOpts['filamentDia']*gCodeOpts['wh']/zoomFactor;}
-                    else {renderOptions['extrusionWidth'] = gCodeOpts['filamentDia']*gCodeOpts['wh']/zoomFactor/2;}
+                    if(renderOptions['actualWidth']){renderOptions['extrusionWidth'] = gCodeOpts['nozzleDia'] * 2;} //gCodeOpts['filamentDia'] * gCodeOpts['wh']/zoomFactor;}
+                    else {renderOptions['extrusionWidth'] = gCodeOpts['nozzleDia'];} //gCodeOpts['filamentDia'] * gCodeOpts['wh']/zoomFactor/2;}
                     if(renderOptions['showNextLayer'] && layerNum < model.length - 1) {
                         drawLayer(layerNum+1, 0, this.getLayerNumSegments(layerNum+1), true);
                     }

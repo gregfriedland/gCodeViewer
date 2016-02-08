@@ -247,6 +247,7 @@ GCODE.analyzer = (function(){
         if(initialized)return;
         canvas = document.getElementById('canvas');
         ctx = canvas.getContext('2d');
+
         transform = ctx.getTransform();
         saveOptions();
         prepareOptions();

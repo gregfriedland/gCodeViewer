@@ -159,6 +159,17 @@ GCODE.gCodeReader = (function(){
         }
     }
 
+    var getParamsFromSpark = function(gcode){
+        var filament = gcode.match(/material.filament_diameter: (\d*.\d+)/m);
+        if(filament){
+            gCodeOptions['filamentDia'] = filament[1] * 10;
+        }
+        var nozzle = gcode.match(/printerType.printer_capabilities.nozzle_diameter: (\d*.\d+)/m);
+        if(nozzle){
+            gCodeOptions['nozzleDia'] = nozzle[1] * 10;
+        }
+    }
+
     var detectSlicer = function(gcode){
 
         if(gcode.match(/Slic3r/)){
@@ -176,8 +187,10 @@ GCODE.gCodeReader = (function(){
         }else if(gcode.match(/Miracle/)){
             slicer = 'makerbot';
             getParamsFromMiracleGrue(gcode);
+        }else if(gcode.match(/Spark/)){
+            slicer = 'spark';
+            getParamsFromSpark(gcode);
         }
-
     }
 
 
